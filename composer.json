@@ -1,5 +1,5 @@
 {
-    "name": "linwj/bitmex",
+    "name": "eskrano/bitmex-php",
     "type": "library",
     "description": "Bitmex API Like the official document interface, Support for arbitrary extension.",
     "license": "MIT",
@@ -7,6 +7,10 @@
         {
             "name": "linwenjun",
             "email": "465382251@qq.com"
+        },
+        {
+            "name": "Alex",
+            "email": "mr.eskrano@gmail.com"
         }
     ],
     "autoload": {
