@@ -117,6 +117,16 @@ class Request
                 $contents=$e->getResponse()->getBody()->getContents();
                 
                 $temp=json_decode($contents,true);
+                
+                if (preg_match('/overload/i', $temp['error']['message'])) {
+                    $this->auth();
+                    try {
+                        return json_decode($this->send(),true);
+                    } catch (RequestException $e) {
+                        throw new Exception($temp);
+                    }
+                }
+                
                 if(!empty($temp)) {
                     $temp['_method']=$this->type;
                     $temp['_url']=$this->host.$this->path;
