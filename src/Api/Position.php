@@ -7,7 +7,7 @@ class Position extends Request
 {
     public function get(array $data){
         $this->type='GET';
-        $this->path='/api/v1/position?symbol='.$data['symbol'] ?? 'XBTUSD';
+        $this->path='/api/v1/position?'.http_build_query($data);
         //$this->data=$data;
         
         return $this->exec();
