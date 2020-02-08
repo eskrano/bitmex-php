@@ -32,10 +32,11 @@ class Order extends Request
         $data['reverse']=$data['reverse'] ?? 'true';
         $data['symbol']=$data['symbol'] ?? 'XBTUSD';
         $data['count']=$data['count'] ?? '100';
+        $data['filter'] = isset($data['filter']) ? $data['filter'] : null;
 
-        $this->path='/api/v1/order?reverse='.$data['reverse'].'&symbol='.$data['symbol'].'&count='.$data['count'];
+        $this->path='/api/v1/order?'.http_build_query($data);
         
-
+        var_dump($this->path);
         
         
         //$this->data=$data;

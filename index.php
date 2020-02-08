@@ -13,5 +13,13 @@ $bitmex = new \Lin\Bitmex\Bitmex($key, $secret);
 
 //$pos = $bitmex->orderBook()->get(['symbol' => 'XBTUSD', 'depth' => 1]);
 
-$pos = $bitmex->user()->getWallet(['currency' => 'XBt']);
+$pos = $bitmex->order()->get([
+    'symbol' => 'XBTUSD',
+    'count' => 100,
+    'reverse' => true,
+    'filter' => json_encode([
+        'ordType' => 'StopLimit',
+        'ordStatus' => 'Filled',
+    ]),
+]);
 var_dump($pos);
