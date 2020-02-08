@@ -45,10 +45,72 @@ class Request
      * */
     protected function auth(){
         $this->nonce();
-        
+
         $this->signature();
+        /*
+        if ($this->type === 'GET' && !empty($this->data)) {
+            $params = [
+                'filter' => null,
+                'columns' => null,
+                'count' => null,
+                'symbol' => null,
+            ];
+
+            if (is_array($this->data)) {
+                foreach ($this->data as $k => $v) {
+                    if ($k === 'columns' && is_array($v)) { // columns  = columnName[]
+                        $params['columns'] = $v;
+                    } else if ($k === 'count') {
+                        $params['count'] = $v;
+                    } else {
+                        if ($k === 'symbol' && strlen($v) > 3) {
+                            $params['filter'][$k] = $v;
+                        } else if ($k === 'symbol' && strlen($v) <= 4) {
+                            $params['symbol'] = $v;
+                        } else {
+                            $params['filter'][$k] = $v;
+                        }
+                    }
+                }
+            }
+
+            var_dump($params, $this->path);
+
+            if ($params['filter'] !== null  || $params['columns'] !== null || $params['count'] !== null || $params['symbol'] !== null) {
+                /**
+                 * If have params existing
+                 *
+
+                $this->path .= "?"; // gg wp
+
+                if ($params['filter'] !== null) {
+                    $this->path .= sprintf("filter=%s&", json_encode($params['filter']));
+                }
+
+                if ($params['columns'] !== null) {
+                    $this->path .= sprintf("columns=%s&", json_encode($params['columns']));
+                }
+
+                if ($params['count'] !== null) {
+                    $this->path .= sprintf("count=%d&", $params['count']);
+                }
+
+                if ($params['symbol'] !== null) {
+                    $this->path .= sprintf("symbol=%s&", $params['symbol']);
+                }
+
+                $this->path = rtrim($this->path, "&");
+            }
+
+            var_dump($this->path, $this->data);
+        }*/
+
+
+
         
         $this->headers();
+
+
     }
     
     /**
@@ -62,8 +124,15 @@ class Request
      * 签名
      * */
     protected function signature(){
-        $endata=http_build_query($this->data);
-        $this->signature=hash_hmac('sha256', $this->type.$this->path.$this->nonce.$endata, $this->secret);
+
+        if ($this->type === 'GET') {
+            $endata = null;
+        } else {
+            $endata=http_build_query($this->data);
+        }
+        $path = $this->path;
+
+        $this->signature=hash_hmac('sha256', $this->type.$path.$this->nonce.$endata, $this->secret);
     }
     
     /**
@@ -96,10 +165,14 @@ class Request
             'timeout'=>$this->timeout
         ];
         
-        if(!empty($this->data)) $data['form_params']=$this->data;
-        
+        if($this->type !== 'GET' && !empty($this->data)) $data['form_params']=$this->data;
+
+        if ($this->type === 'GET' && !empty($this->data)) {
+            $this->path .= '?'.http_build_query($this->data);
+        }
+
         $response = $client->request($this->type, $this->host.$this->path, $data);
-        
+
         return $response->getBody()->getContents();
     }
     

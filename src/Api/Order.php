@@ -28,14 +28,17 @@ class Order extends Request
      * */
     public function get(array $data=[]){
         $this->type='GET';
-        $this->path='/api/v1/order';
-        
+
         $data['reverse']=$data['reverse'] ?? 'true';
         $data['symbol']=$data['symbol'] ?? 'XBTUSD';
         $data['count']=$data['count'] ?? '100';
+
+        $this->path='/api/v1/order?reverse='.$data['reverse'].'&symbol='.$data['symbol'].'&count='.$data['count'];
+        
+
         
         
-        $this->data=$data;
+        //$this->data=$data;
         
         return $this->exec();
     }

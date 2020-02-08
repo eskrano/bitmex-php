@@ -30,8 +30,8 @@ class User extends Request
      * */
     public function getWallet($data){
         $this->type='GET';
-        $this->path='/api/v1/user/wallet';
-        $this->data=$data;
+        $this->path='/api/v1/user/wallet?currency='. $data['currency'] ?? 'XBt';
+        //$this->data=$data;
         
         return $this->exec();
     }
