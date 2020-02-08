@@ -36,9 +36,6 @@ class Order extends Request
 
         $this->path='/api/v1/order?'.http_build_query($data);
         
-        var_dump($this->path);
-        
-        
         //$this->data=$data;
         
         return $this->exec();
